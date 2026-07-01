@@ -19,7 +19,9 @@ import {
   CheckCircle, 
   AlertTriangle,
   LogOut,
-  Sparkles
+  Sparkles,
+  Lock,
+  Unlock
 } from 'lucide-react';
 import { Question, PlayerScore, GameState } from './types';
 import { questions } from './questions';
@@ -98,6 +100,10 @@ export default function App() {
   const [inputName, setInputName] = useState('');
   const [showInstructions, setShowInstructions] = useState(false);
   const [leaderboard, setLeaderboard] = useState<PlayerScore[]>([]);
+  const [isAdminUnlocked, setIsAdminUnlocked] = useState(false);
+  const [adminPasswordInput, setAdminPasswordInput] = useState("");
+  const [showPasswordError, setShowPasswordError] = useState(false);
+  const [showPasswordInput, setShowPasswordInput] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showPrizeTreeMobile, setShowPrizeTreeMobile] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
@@ -992,54 +998,148 @@ export default function App() {
 
             {/* Quick Leaderboard Preview */}
             <div className="text-right border-t border-oman-gold/20 pt-6">
-              <div className="flex justify-between items-center mb-3">
-                {leaderboard.length > 0 && (
-                  <button 
-                    id="clear-leaderboard-btn"
-                    onClick={() => setShowLeaderboardClearConfirm(true)}
-                    className="text-xs text-red-400 hover:text-red-300 transition-all bg-red-950/20 hover:bg-red-950/40 px-2 py-1 rounded border border-red-500/20 flex items-center gap-1 cursor-pointer"
-                  >
-                    <span>🗑️</span>
-                    <span>مسح السجل</span>
-                  </button>
-                )}
-                <h3 className="font-serif text-lg font-bold text-oman-gold flex items-center gap-2">
-                  <Trophy className="w-4 h-4" />
-                  <span>لوحة المتصدرين وأبطال التراث</span>
-                </h3>
-              </div>
+              {!isAdminUnlocked ? (
+                <div className="flex flex-col items-center justify-center p-5 bg-oman-blue/30 border border-oman-gold/20 rounded-xl relative overflow-hidden">
+                  <Lock className="w-8 h-8 text-oman-gold mb-2 animate-pulse" />
+                  <h3 className="font-serif text-base font-bold text-oman-gold-light mb-1">
+                    قائمة المتسابقين محمية بقفل
+                  </h3>
+                  <p className="text-xs text-slate-300 mb-4 text-center max-w-sm leading-relaxed">
+                    لرؤية لوحة المتصدرين وأبطال التراث، يرجى إدخال الرقم السري الخاص بالمسؤول.
+                  </p>
 
-              {leaderboard.length === 0 ? (
-                <p className="text-xs text-slate-400 text-center py-4 italic">
-                  لا يوجد سجل متسابقين حالياً. كن أول من يربح المليون ويرسخ اسمه هنا!
-                </p>
-              ) : (
-                <div className="overflow-x-auto max-h-48 overflow-y-auto pr-1">
-                  <table className="w-full text-xs text-slate-300 text-right">
-                    <thead>
-                      <tr className="border-b border-oman-gold/20 text-oman-gold-light text-[11px] uppercase">
-                        <th className="py-2 font-bold">الترتيب</th>
-                        <th className="py-2 font-bold">المتسابق</th>
-                        <th className="py-2 text-center font-bold">الإجابات</th>
-                        <th className="py-2 text-left font-bold">الجائزة المستحقة</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {leaderboard.map((item, idx) => (
-                        <tr 
-                          key={item.id} 
-                          className={`border-b border-oman-gold/5 hover:bg-oman-gold/5 transition-colors ${idx === 0 ? 'bg-amber-500/5 text-amber-200 font-semibold' : ''}`}
+                  {!showPasswordInput ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        soundManager.playChime();
+                        setShowPasswordInput(true);
+                        setShowPasswordError(false);
+                      }}
+                      className="px-4 py-2 bg-oman-gold/10 hover:bg-oman-gold/20 border border-oman-gold/40 text-oman-gold font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+                    >
+                      <Unlock className="w-3.5 h-3.5" />
+                      <span>إدخال الرقم السري</span>
+                    </button>
+                  ) : (
+                    <form 
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        if (adminPasswordInput.trim() === 'admin') {
+                          setIsAdminUnlocked(true);
+                          setShowPasswordInput(false);
+                          setShowPasswordError(false);
+                          setAdminPasswordInput('');
+                          soundManager.playChime();
+                        } else {
+                          setShowPasswordError(true);
+                          soundManager.playWrong();
+                        }
+                      }}
+                      className="w-full max-w-xs space-y-3"
+                    >
+                      <div className="relative">
+                        <input
+                          type="password"
+                          value={adminPasswordInput}
+                          onChange={(e) => setAdminPasswordInput(e.target.value)}
+                          placeholder="أدخل الرقم السري للمسؤول..."
+                          className="w-full text-center px-3 py-2 bg-oman-dark border border-oman-gold/40 rounded-lg text-white text-xs focus:outline-none focus:border-oman-gold transition-all"
+                          autoFocus
+                          required
+                        />
+                      </div>
+                      {showPasswordError && (
+                        <p className="text-[11px] text-red-400 text-center font-bold">
+                          ⚠️ الرقم السري غير صحيح! حاول مرة أخرى.
+                        </p>
+                      )}
+                      <div className="flex gap-2 justify-center">
+                        <button
+                          type="submit"
+                          className="px-4 py-1.5 bg-gradient-to-b from-amber-500 to-amber-600 text-oman-dark font-bold text-xs rounded-lg hover:from-amber-400 hover:to-amber-500 transition-all cursor-pointer active:scale-95"
                         >
-                          <td className="py-2 font-mono">{idx + 1}#</td>
-                          <td className="py-2 font-bold max-w-[120px] truncate">{item.name}</td>
-                          <td className="py-2 text-center font-mono">{item.correctAnswersCount} / 15</td>
-                          <td className="py-2 text-left font-bold text-oman-gold font-mono">
-                            {item.prizeWon.toLocaleString('ar-OM')} ريال
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                          تأكيد
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowPasswordInput(false);
+                            setShowPasswordError(false);
+                            setAdminPasswordInput('');
+                          }}
+                          className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-lg transition-all cursor-pointer active:scale-95"
+                        >
+                          إلغاء
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <div className="flex justify-between items-center mb-4 bg-oman-gold/5 p-2 rounded-lg border border-oman-gold/10">
+                    <div className="flex gap-2">
+                      {leaderboard.length > 0 && (
+                        <button 
+                          id="clear-leaderboard-btn"
+                          onClick={() => setShowLeaderboardClearConfirm(true)}
+                          className="text-xs text-red-400 hover:text-red-300 transition-all bg-red-950/20 hover:bg-red-950/40 px-2 py-1 rounded border border-red-500/20 flex items-center gap-1 cursor-pointer"
+                        >
+                          <span>🗑️</span>
+                          <span>مسح السجل</span>
+                        </button>
+                      )}
+                      <button 
+                        onClick={() => {
+                          setIsAdminUnlocked(false);
+                          soundManager.playChime();
+                        }}
+                        className="text-xs text-slate-300 hover:text-white transition-all bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded border border-slate-700 flex items-center gap-1 cursor-pointer"
+                      >
+                        <Lock className="w-3.5 h-3.5 text-oman-gold" />
+                        <span>قفل القائمة</span>
+                      </button>
+                    </div>
+                    <h3 className="font-serif text-base font-bold text-oman-gold flex items-center gap-2">
+                      <Trophy className="w-4 h-4" />
+                      <span>لوحة المتصدرين وأبطال التراث</span>
+                    </h3>
+                  </div>
+
+                  {leaderboard.length === 0 ? (
+                    <p className="text-xs text-slate-400 text-center py-4 italic">
+                      لا يوجد سجل متسابقين حالياً. كن أول من يربح المليون ويرسخ اسمه هنا!
+                    </p>
+                  ) : (
+                    <div className="overflow-x-auto max-h-48 overflow-y-auto pr-1">
+                      <table className="w-full text-xs text-slate-300 text-right">
+                        <thead>
+                          <tr className="border-b border-oman-gold/20 text-oman-gold-light text-[11px] uppercase">
+                            <th className="py-2 font-bold">الترتيب</th>
+                            <th className="py-2 font-bold">المتسابق</th>
+                            <th className="py-2 text-center font-bold">الإجابات</th>
+                            <th className="py-2 text-left font-bold">الجائزة المستحقة</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {leaderboard.map((item, idx) => (
+                            <tr 
+                              key={item.id} 
+                              className={`border-b border-oman-gold/5 hover:bg-oman-gold/5 transition-colors ${idx === 0 ? 'bg-amber-500/5 text-amber-200 font-semibold' : ''}`}
+                            >
+                              <td className="py-2 font-mono">{idx + 1}#</td>
+                              <td className="py-2 font-bold max-w-[120px] truncate">{item.name}</td>
+                              <td className="py-2 text-center font-mono">{item.correctAnswersCount} / 15</td>
+                              <td className="py-2 text-left font-bold text-oman-gold font-mono">
+                                {item.prizeWon.toLocaleString('ar-OM')} ريال
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
