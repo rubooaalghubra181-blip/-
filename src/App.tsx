@@ -970,7 +970,7 @@ export default function App() {
             {/* Start Game Form */}
             <form onSubmit={startGame} className="max-w-md mx-auto space-y-4 mb-8">
               <div className="text-right">
-                <label className="block text-sm text-slate-300 font-semibold mb-1 mr-1">اسم المتسابق الكريم:</label>
+                <label className="block text-sm text-slate-300 font-semibold mb-1 mr-1">اسم المتسابق كاملاً:</label>
                 <div className="relative">
                   <User className="absolute right-3 top-3 w-5 h-5 text-oman-gold/60" />
                   <input 
@@ -978,7 +978,7 @@ export default function App() {
                     type="text" 
                     value={inputName}
                     onChange={(e) => setInputName(e.target.value)}
-                    placeholder="أدخل اسمك الكريم هنا..."
+                    placeholder="أدخل اسمك كاملاً هنا..."
                     maxLength={25}
                     className="w-full pl-4 pr-11 py-3 bg-oman-dark/90 border border-oman-gold/30 rounded-xl text-center text-white placeholder-slate-500 focus:outline-none focus:border-oman-gold focus:ring-1 focus:ring-oman-gold shadow-inner transition-all text-base font-bold"
                     required
@@ -1635,7 +1635,7 @@ export default function App() {
                 </div>
 
                 <div className="blue-glass max-w-md mx-auto p-6 rounded-xl border border-oman-gold/20 shadow-inner">
-                  <p className="text-slate-400 text-sm mb-1">المتسابق الكريم:</p>
+                  <p className="text-slate-400 text-sm mb-1">اسم المتسابق كاملاً:</p>
                   <h3 className="text-xl font-bold text-white mb-4">{gameState.playerName}</h3>
 
                   <div className="grid grid-cols-2 gap-4 text-center">
