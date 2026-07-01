@@ -28,7 +28,6 @@ import { questions } from './questions';
 import { soundManager } from './sound';
 // @ts-ignore
 import khanjarBg from './assets/images/oman_khanjar_bg_1782940851151.jpg';
-
 // Constants
 const PRIZES = [
   100, 200, 300, 500, 1000,
