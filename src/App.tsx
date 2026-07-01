@@ -26,6 +26,8 @@ import {
 import { Question, PlayerScore, GameState } from './types';
 import { questions } from './questions';
 import { soundManager } from './sound';
+// @ts-ignore
+import khanjarBg from './assets/images/oman_khanjar_bg_1782940851151.jpg';
 
 // Constants
 const PRIZES = [
@@ -847,6 +849,16 @@ export default function App() {
       {/* Immersive Dot Grid Overlay */}
       <div className="absolute inset-0 opacity-10 pointer-events-none dot-grid" />
 
+      {/* Subtle Omani Khanjar Watermark Background */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0 select-none opacity-8 md:opacity-12">
+        <img 
+          src={khanjarBg} 
+          alt="الخنجر العماني" 
+          className="w-[85vw] h-[85vw] max-w-[600px] max-h-[600px] md:w-[45vw] md:h-[45vw] object-contain mix-blend-screen animate-[pulse_10s_infinite_ease-in-out]"
+          referrerPolicy="no-referrer"
+        />
+      </div>
+
       {/* Decorative Traditional Omani Corner Patterns */}
       <div className="absolute top-0 right-0 w-32 h-32 md:w-48 md:h-48 border-t-4 border-r-4 border-oman-gold/30 rounded-tr-3xl opacity-20 pointer-events-none" />
       <div className="absolute top-0 left-0 w-32 h-32 md:w-48 md:h-48 border-t-4 border-l-4 border-oman-gold/30 rounded-tl-3xl opacity-20 pointer-events-none" />
@@ -981,7 +993,7 @@ export default function App() {
                   className="w-full py-3 bg-gradient-to-b from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-oman-dark font-extrabold text-base rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-1.5 border border-amber-300/30 cursor-pointer"
                 >
                   <Sparkles className="w-5 h-5" />
-                  <span>ابدأ اللعبة</span>
+                  <span>ابدأ المسابقة</span>
                 </button>
 
                 <button 
