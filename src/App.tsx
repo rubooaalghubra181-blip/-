@@ -837,6 +837,7 @@ export default function App() {
 
   return (
     <div 
+      dir="rtl"
       className={`min-h-screen relative flex flex-col justify-between overflow-x-hidden bg-slate-950 select-none ${isShaking ? 'shake-element' : ''}`}
     >
       {/* 3D Studio Background and Moving Spotlight Lights */}
@@ -850,7 +851,7 @@ export default function App() {
       <div className="absolute inset-0 opacity-10 pointer-events-none dot-grid" />
 
       {/* Subtle Omani Khanjar Watermark Background */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0 select-none opacity-8 md:opacity-12">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-0 select-none opacity-25 md:opacity-35">
         <img 
           src={khanjarBg} 
           alt="الخنجر العماني" 
@@ -882,8 +883,8 @@ export default function App() {
         </div>
 
         {/* Institutional Affiliation & Global Controls */}
-        <div className="flex items-center gap-4">
-          <div className="flex flex-col items-end text-right border-r border-oman-gold/20 pr-4 pl-1">
+        <div className="flex items-center gap-2 md:gap-4">
+          <div className="hidden md:flex flex-col items-end text-right border-r border-oman-gold/20 pr-4 pl-1">
             <span className="text-[10px] md:text-xs font-bold text-oman-gold-light tracking-wide font-sans">
               المديرية العامة للتعليم بمحافظة الوسطى
             </span>
@@ -894,7 +895,7 @@ export default function App() {
 
           <div className="h-6 w-px bg-oman-gold/20 hidden md:block" />
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 md:gap-2">
             <button 
               id="sound-toggle-btn"
               onClick={toggleSound}
@@ -1166,10 +1167,10 @@ export default function App() {
             <div className="lg:col-span-3 flex flex-col justify-between gap-6">
               
               {/* Game Stats Bar & Active Lifelines */}
-              <div className="blue-glass rounded-xl p-4 gold-border flex flex-wrap gap-4 justify-between items-center shadow-md">
+              <div className="blue-glass rounded-xl p-4 gold-border flex flex-col sm:flex-row gap-4 justify-between items-center shadow-md text-center">
                 
                 {/* Lifeline Buttons Panel */}
-                <div className="flex items-center gap-2 md:gap-3">
+                <div className="flex items-center justify-center gap-2 md:gap-3">
                   {/* 50/50 */}
                   <button 
                     id="lifeline-fifty-fifty"
@@ -1240,13 +1241,13 @@ export default function App() {
                 <button 
                   id="mobile-prize-tree-trigger"
                   onClick={() => { soundManager.playChime(); setShowPrizeTreeMobile(true); }}
-                  className="lg:hidden bg-oman-blue px-3 py-1.5 rounded-lg border border-oman-gold text-oman-gold text-xs font-bold hover:bg-oman-gold/20 cursor-pointer"
+                  className="lg:hidden bg-oman-blue px-3 py-1.5 rounded-lg border border-oman-gold text-oman-gold text-xs font-bold hover:bg-oman-gold/20 cursor-pointer w-full max-w-xs"
                 >
                   شجرة الجوائز: {PRIZES[gameState.currentLevel].toLocaleString('ar-OM')} ر.ع.
                 </button>
 
                 {/* Timer Countdown Area */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center gap-3">
                   <div className="text-left font-mono">
                     <span className="text-xs text-slate-400 block">الزمن المتبقي</span>
                     <span className={`text-xl md:text-2xl font-bold ${gameState.timeRemaining <= 10 ? 'text-red-500 animate-pulse' : 'text-oman-gold'}`}>
@@ -1379,7 +1380,7 @@ export default function App() {
                         key={key}
                         onClick={() => handleSelectOption(key)}
                         disabled={isHidden || gameState.isAnswerSubmitted || isWaitingForReveal}
-                        className={`relative px-8 py-5 text-right text-sm md:text-base font-bold transition-all flex items-center justify-between group shadow-md hex-shape ${buttonStyles} cursor-pointer`}
+                        className={`relative px-4 py-3.5 md:px-8 md:py-5 text-right text-sm md:text-base font-bold transition-all flex items-center justify-between gap-2 group shadow-md hex-shape ${buttonStyles} cursor-pointer`}
                       >
                         {/* Left side prefix design */}
                         <span className="flex items-center gap-3">
@@ -1409,14 +1410,14 @@ export default function App() {
               </motion.div>
 
               {/* Bottom Gameplay Console: Submit/Next and Withdrawal Buttons */}
-              <div className="flex justify-between items-center gap-4 mt-2">
+              <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mt-2 w-full">
                 
                 {/* Withdrawal button */}
                 <button 
                   id="withdraw-btn"
                   onClick={handleWithdraw}
                   disabled={gameState.isAnswerSubmitted}
-                  className={`px-5 py-3 rounded-xl font-bold text-sm md:text-base transition-all flex items-center gap-2 border shadow-lg cursor-pointer ${
+                  className={`px-5 py-3 rounded-xl font-bold text-sm md:text-base transition-all flex items-center justify-center gap-2 border shadow-lg cursor-pointer w-full sm:w-auto ${
                     gameState.isAnswerSubmitted
                       ? 'bg-slate-900/40 border-slate-800 text-slate-500 cursor-not-allowed'
                       : 'bg-red-950/70 border-red-500/30 text-red-300 hover:bg-red-900/80 hover:border-red-400'
@@ -1432,7 +1433,7 @@ export default function App() {
                     id="submit-answer-btn"
                     onClick={handleSubmitAnswer}
                     disabled={!gameState.selectedAnswer}
-                    className={`px-8 py-3.5 rounded-xl text-base font-extrabold transition-all border shadow-lg cursor-pointer ${
+                    className={`px-8 py-3.5 rounded-xl text-sm md:text-base font-extrabold transition-all border shadow-lg cursor-pointer w-full sm:w-auto text-center ${
                       gameState.selectedAnswer 
                         ? 'bg-gradient-to-b from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-oman-dark border-amber-300' 
                         : 'bg-slate-900/60 border-slate-800 text-slate-400 cursor-not-allowed'
@@ -1444,13 +1445,13 @@ export default function App() {
                   <motion.div 
                     initial={{ scale: 0.95 }} 
                     animate={{ scale: 1 }}
-                    className="flex items-center gap-3"
+                    className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto"
                   >
                     {/* Success/Error banner text */}
                     {gameState.selectedAnswer === currentQuestion.correctAnswer ? (
-                      <div className="text-right ml-4">
+                      <div className="text-right sm:ml-4 mb-2 sm:mb-0">
                         <span className="text-xs text-slate-300 block">مرشد التراث يخبرك:</span>
-                        <span className="text-green-400 font-bold text-sm md:text-base block">
+                        <span className="text-green-400 font-bold text-sm md:text-base block leading-relaxed">
                           {gameState.currentLevel === 4 
                             ? "رائع! إجابة صحيحة. لقد بلغت محطة الأمان الأولى (1,000 ريال)!" 
                             : gameState.currentLevel === 9 
@@ -1463,9 +1464,9 @@ export default function App() {
                         </span>
                       </div>
                     ) : (
-                      <div className="text-right ml-4">
+                      <div className="text-right sm:ml-4 mb-2 sm:mb-0">
                         <span className="text-xs text-slate-300 block">مرشد التراث يخبرك:</span>
-                        <span className="text-red-400 font-bold text-sm md:text-base block">
+                        <span className="text-red-400 font-bold text-sm md:text-base block leading-relaxed">
                           للأسف إجابة غير صحيحة، حاول في مسابقة أخرى.
                         </span>
                       </div>
@@ -1475,7 +1476,7 @@ export default function App() {
                       <button 
                         id="next-question-btn"
                         onClick={handleNextQuestion}
-                        className="px-8 py-3.5 bg-gradient-to-b from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white font-extrabold text-base rounded-xl border border-green-300/30 shadow-lg cursor-pointer relative overflow-hidden group flex items-center gap-2"
+                        className="px-8 py-3.5 bg-gradient-to-b from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 text-white font-extrabold text-sm md:text-base rounded-xl border border-green-300/30 shadow-lg cursor-pointer relative overflow-hidden group flex items-center justify-center gap-2 w-full sm:w-auto text-center"
                       >
                         {/* Progress line indicator at the bottom of the button */}
                         {transitionCountdown !== null && (
@@ -1497,7 +1498,7 @@ export default function App() {
                       <button 
                         id="finish-game-btn"
                         onClick={() => handleGameOver(gameState.currentLevel)}
-                        className="px-8 py-3.5 bg-gradient-to-b from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-extrabold text-base rounded-xl border border-red-300/30 shadow-lg cursor-pointer"
+                        className="px-8 py-3.5 bg-gradient-to-b from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-extrabold text-sm md:text-base rounded-xl border border-red-300/30 shadow-lg cursor-pointer w-full sm:w-auto text-center"
                       >
                         رؤية النتيجة النهائية
                       </button>
